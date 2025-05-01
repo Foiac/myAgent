@@ -15,16 +15,19 @@ class OpenAIAdapter(GeneratorService):
         self.client = OpenAI(api_key=api_key)
 
     def generate(self, prompt: Prompt) -> str:
+
         response = self.client.chat.completions.create(
-            model="gpt-3.5-turbo",
-            temperature=0.1,
+            model="gpt-4o-mini",
+            temperature=0.5,
             messages=[
                 {"role": "system", "content": get_agent_information()},
                 {"role": "user", "content": prompt.user_input}
             ]
         )
+
         print(
                 {"role": "system", "content": get_agent_information()},
                 {"role": "user", "content": prompt.user_input}
             )
+        
         return response.choices[0].message.content
