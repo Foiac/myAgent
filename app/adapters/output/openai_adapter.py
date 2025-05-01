@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 from openai import OpenAI
 from app.domain.models.prompt import Prompt
 from app.domain.services.generator_service import GeneratorService
+from app.config.agent_config import get_agent_information
 
 load_dotenv()
 
@@ -16,13 +17,14 @@ class OpenAIAdapter(GeneratorService):
     def generate(self, prompt: Prompt) -> str:
         response = self.client.chat.completions.create(
             model="gpt-3.5-turbo",
+            temperature=0.1,
             messages=[
-                {"role": "system", "content": prompt.context},
+                {"role": "system", "content": get_agent_information()},
                 {"role": "user", "content": prompt.user_input}
             ]
         )
         print(
-                {"role": "system", "content": prompt.context},
+                {"role": "system", "content": get_agent_information()},
                 {"role": "user", "content": prompt.user_input}
             )
         return response.choices[0].message.content
